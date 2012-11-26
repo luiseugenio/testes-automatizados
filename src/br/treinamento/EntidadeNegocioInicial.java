@@ -1,0 +1,78 @@
+package br.treinamento;
+
+import java.util.Date;
+
+public class EntidadeNegocioInicial {
+	private void validarCamposObrigatorios(Entidade entidade) throws Exception {
+		if (entidade.getNome() == null) {
+			throw new Exception("O nome é obrigatório");
+		}
+		if (entidade.getNumeroDocumento() == null) {
+			throw new Exception("O número do documento é obrigatório");
+		}
+		if (entidade.getTipoDocumento() == null) {
+			throw new Exception("O tipo do documento é obrigatório");
+		}
+		if ((entidade.getDataInicial() != null) && (entidade.getDataFinal() == null)) {
+			throw new Exception("O período deve ser informado por completo");
+		}
+	}
+
+	private void validarRegras(Entidade entidade) throws Exception {
+		if (entidade.getNome().length() <= 4) {
+			throw new Exception("O nome não pode ter menos que 5 caracteres");
+		}
+		if (entidade.getNome().length() >= 30) {
+			throw new Exception("O nome não pode ter mais que 30 caracteres");
+		}
+		if (entidade.getDataInicial() != null && entidade.getDataInicial().compareTo(new Date()) < 0) {
+			throw new Exception("A data inicial não pode ser menor que a data atual");
+		}
+		if (entidade.getDataInicial() != null && entidade.getDataFinal().compareTo(entidade.getDataInicial()) < 0) {
+			throw new Exception("A data final não pode ser menor que a data inicial");
+		}
+		if (entidade.getTipoDocumento() != 1 && entidade.getTipoDocumento() != 2) {
+			throw new Exception("Tipo de documento inválido");
+		}
+		if (entidade.getEmail() != null && !(entidade.getEmail().contains("@") || entidade.getEmail().contains("."))) {
+			throw new Exception("Endereço de email inválido");
+		}
+	}
+
+	public Entidade salvar(Entidade entidade) throws Exception {
+		validarCamposObrigatorios(entidade);
+		validarRegras(entidade);
+
+		// Salvando...
+		entidade.setId(1L);
+
+		return entidade;
+	}
+
+	public Entidade alterar(Entidade entidade) throws Exception {
+		validarCamposObrigatorios(entidade);
+		validarRegras(entidade);
+
+		// Alterando...
+
+		return entidade;
+	}
+
+	public void excluir(Entidade entidade) throws Exception {
+		if (entidade.getTipoDocumento() == 1) {
+			throw new Exception("Não é possível excluir entidades com cpf");
+		}
+	}
+
+	public Entidade getById(Long id) throws Exception {
+		return null;
+	}
+
+	public int getQuantidadeRegistros() throws Exception {
+		return 0;
+	}
+
+	public boolean verificarUnicidadeNome(Entidade entidade) throws Exception {
+		return false;
+	}
+}
